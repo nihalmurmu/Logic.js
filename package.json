@@ -1,7 +1,7 @@
 {
   "name": "logic.js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Web based logic gate simulation",
   "main": "webpack.config.js",
   "scripts": {
     "build": "npm run main:build",
@@ -11,8 +11,8 @@
     "test:build": "webpack --config webpack.test.config.js",
     "test:dev": "webpack-dev-server  --config webpack.test.config.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jesse Sivonen",
+  "license": "MIT",
   "devDependencies": {
     "@types/bluebird": "^3.5.20",
     "@types/node": "^9.6.2",
