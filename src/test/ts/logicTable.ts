@@ -22,18 +22,22 @@ export function printLogicTable(component: Component, inputCount?: number) {
 	let resultTable: { [columnName: string]: boolean }[] = []
 
 	if (!inputCount) {
-		const constructor = <typeof Component> component.constructor;
-		inputCount = constructor.maxInputCount;
+		inputCount = component.inputCount;
 	}
-	const tests = booleanCombinations(inputCount);
-	for (const test of tests) {
-		component.input = test;
+	const testValues = booleanCombinations(inputCount);
+	for (const test of testValues) {
+		test.forEach((value, index) => {
+			const input = component.getInput(index);
+			if (input) input.value = value;
+		});
 
 		let result: { [columnName: string]: boolean } = {};
-		component.input.forEach((value, index) => {
-			result[`Input ${index}`] = value;
-		});
-		component.output.forEach((value, index) => {
+		for (let i = 0; i < component.inputCount; i++) {
+			const input = component.getInput(i);
+			if (input)
+				result[`Input ${i}`] = input.value;
+		}
+		component.getOutputValues().forEach((value, index) => {
 			result[`Output ${index}`] = value;
 		});
 		resultTable.push(result);

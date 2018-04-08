@@ -1,4 +1,4 @@
-import { Component } from './Component';
+import { Component, Input, Output } from './Component';
 
 /**
  * Gate is the smallest Component, takes 1 - 2
@@ -6,82 +6,77 @@ import { Component } from './Component';
  * Gate implementations are responsible for
  * single or simple combined boolean operations.
  */
-export abstract class Gate<
-	INPUT extends [ boolean ] | [ boolean, boolean ]
-> extends Component {
-	static readonly maxInputCount: 1 | 2 = 2;
-	static readonly maxOutputCount: 1 = 1;
+export abstract class Gate extends Component {
+	inputCount: 1 | 2 = 2;
+	outputCount: 1 = 1;
 	
-	input: INPUT;
-	get output(): [ boolean ] {
-		return [ this.process(this.input) ];
+	inputs: Input[] = [];
+	outputs: Output[] = [];
+
+	constructor() {
+		super()
+
+		// Initialize I/O
+		for (let i = 0; i < this.inputCount; i++) {
+			this.inputs.push(new Input(this));
+		}
+		this.outputs[0] = new Output(this);
 	}
 
-	protected abstract process(input: INPUT): boolean;
+	protected abstract eval(input: boolean[]): boolean;
 
-	public constructor(initialValue?: INPUT) {
-		super();
-
-		// Set initial input value
-		const constructor = <typeof Component>this.constructor;
-		const inputCount = constructor.maxInputCount;
-		if (initialValue) {
-			this.input = initialValue;
-		} else {
-			let input: boolean[] = [];
-			for (let i = 0; i < inputCount; i++) {
-				input.push(false);
-			}
-			this.input = <INPUT> input;
-		}
+	evaluate() {
+		const input = this.inputs.map(({ value }) => value);
+		this.outputs[0].value = this.eval(input);
+		super.evaluate();
 	}
 }
 
-export class AND extends Gate<[ boolean, boolean ]> {
-	static readonly maxInputCount: 2 = 2;
-	protected process([ a, b ]: boolean[]) {
+export class AND extends Gate {
+	inputCount: 2 = 2;
+	protected eval([ a, b ]: boolean[]) {
 		return a && b;
 	}
 }
 
-export class OR extends Gate<[ boolean, boolean ]> {
-	static readonly maxInputCount: 2 = 2;
-	protected process([ a, b ]: boolean[]) {
+export class OR extends Gate {
+	inputCount: 2 = 2;
+	protected eval([ a, b ]: boolean[]) {
 		return a || b;
 	}
 }
 
-export class NOT extends Gate<[ boolean ]> {
-	static readonly maxInputCount: 1 = 1;
-	protected process([ a ]: boolean[]) {
+export class NOT extends Gate {
+	inputCount: 1 = 1;
+	protected eval([ a ]: boolean[]) {
 		return !a;
 	}
 }
 
-export class NAND extends Gate<[ boolean, boolean ]> {
-	static readonly maxInputCount: 2 = 2;
-	protected process([ a, b ]: boolean[]) {
+export class NAND extends Gate {
+	inputCount: 2 = 2;
+	protected eval([ a, b ]: boolean[]) {
 		return !(a && b);
 	}
 }
 
-export class NOR extends Gate<[ boolean, boolean ]> {
-	static readonly inputCount: 2 = 2;
-	protected process([ a, b ]: boolean[]) {
+export class NOR extends Gate {
+	inputCount: 2 = 2;
+	protected eval([ a, b ]: boolean[]) {
 		return !(a || b);
 	}
 }
 
-export class XOR extends Gate<[ boolean, boolean ]> {
-	static readonly inputCount: 2 = 2;
-	process([ a, b ]: boolean[]) {
+export class XOR extends Gate {
+	inputCount: 2 = 2;
+	protected eval([ a, b ]: boolean[]) {
 		return (a || b) && !(a && b);
 	}
 }
 
-export class XNOR extends Gate<[ boolean, boolean ]> {
-	static readonly inputCount: 2 = 2;
-	protected process([ a, b ]: boolean[]) {
+export class XNOR extends Gate {
+	inputCount: 2 = 2;
+	protected eval([ a, b ]: boolean[]) {
 		return !(a || b) || (a && b);
 	}
 }
