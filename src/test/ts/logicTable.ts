@@ -18,13 +18,25 @@ function booleanCombinations(length: number): boolean[][] {
 	}
 }
 
-function testGate(component: Component) {
-	let resultTable: boolean[][] = [];
+export function printLogicTable(component: Component, inputCount?: number) {
+	let resultTable: { [columnName: string]: boolean }[] = []
 
-	let tests = booleanCombinations(component.inputCount);
+	if (!inputCount) {
+		const constructor = <typeof Component> component.constructor;
+		inputCount = constructor.maxInputCount;
+	}
+	const tests = booleanCombinations(inputCount);
 	for (const test of tests) {
 		component.input = test;
-		resultTable.push(component.input.concat(component.output));
+
+		let result: { [columnName: string]: boolean } = {};
+		component.input.forEach((value, index) => {
+			result[`Input ${index}`] = value;
+		});
+		component.output.forEach((value, index) => {
+			result[`Output ${index}`] = value;
+		});
+		resultTable.push(result);
 	}
 
 	console.groupCollapsed(component.constructor.prototype.constructor.name);
