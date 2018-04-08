@@ -1,0 +1,7 @@
+- [] Rendering
+- [] Fix circular logic flow
+- [] Renderer instead of Drawable
+- [X] Commit drawing
+- [X] I/O type
+- [x] Visualize I/O
+- [x] Refactor max I/O count
