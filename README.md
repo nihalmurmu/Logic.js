@@ -39,7 +39,7 @@ That is where the current scope would end, but ideas for next milestone, which a
 
 # Current state of the project
 
-" Fundamental logic and gates are done. Needs a lot of reality checking.
+* Fundamental logic and gates are done. Needs a lot of reality checking.
 
 * Currently working on diagram drawing. A lot of work there.
 
