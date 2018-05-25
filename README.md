@@ -6,7 +6,7 @@
 
 This project is work in progress.
 
-Poke me or come back later if you are interested.
+
 
 ## Problem
 The primary goal of these libs / apps at the current scope is to be educational.
